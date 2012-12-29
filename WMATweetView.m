@@ -110,8 +110,13 @@
 	if (self = [super initWithFrame:frame])
 	{
 		[self setupDefaults];
+        
 		self.text = [tweet valueForKey:@"text"];
 		NSMutableArray *entities = [NSMutableArray array];
+        for (NSDictionary *tweetEntity in [[tweet valueForKey:@"entities"] valueForKey:@"media"])
+		{
+			[entities addObject:[WMATweetURLEntity entityWithURL:[NSURL URLWithString:[tweetEntity valueForKey:@"url"]] expandedURL:[NSURL URLWithString:[tweetEntity valueForKey:@"expanded_url"]] displayURL:[tweetEntity valueForKey:@"display_url"] start:[[[tweetEntity valueForKey:@"indices"] objectAtIndex:0] unsignedIntegerValue] end:[[[tweetEntity valueForKey:@"indices"] objectAtIndex:1] unsignedIntegerValue]]];
+		}
 		for (NSDictionary *tweetEntity in [[tweet valueForKey:@"entities"] valueForKey:@"urls"])
 		{
 			[entities addObject:[WMATweetURLEntity entityWithURL:[NSURL URLWithString:[tweetEntity valueForKey:@"url"]] expandedURL:[NSURL URLWithString:[tweetEntity valueForKey:@"expanded_url"]] displayURL:[tweetEntity valueForKey:@"display_url"] start:[[[tweetEntity valueForKey:@"indices"] objectAtIndex:0] unsignedIntegerValue] end:[[[tweetEntity valueForKey:@"indices"] objectAtIndex:1] unsignedIntegerValue]]];
